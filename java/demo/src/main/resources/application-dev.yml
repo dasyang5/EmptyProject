@@ -1,0 +1,27 @@
+server:
+  port: 23080
+spring:
+  #Hibernate configuration
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  #MySQL configuration
+  datasource:
+    url: jdbc:mysql://192.168.35.235:3306/demo?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&characterSetResults=utf8&rewriteBatchedStatements=true&useSSL=false
+    username: xtms
+    password: xtms
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+atls:
+  file:
+    #应用保存路径
+    base-path: /home/atls/downloads
+    #应用下载基础路径
+    req-path: http://192.168.35.235:28081
