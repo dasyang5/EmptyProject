@@ -28,7 +28,7 @@ public interface BaseService<T, ID extends Serializable> {
 
     List<T> find(T t, PageBean pageBean);
 
-    List<T> find(T t, PageBean pageBean, String[] orderBy);
+    List<T> find(T t, String[] orderBy, PageBean pageBean);
 
     T getEntity(T t);
 

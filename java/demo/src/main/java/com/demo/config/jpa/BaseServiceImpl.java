@@ -58,7 +58,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
     }
 
     @Override
-    public List<T> find(T t, PageBean pageBean, String[] orderBy) {
+    public List<T> find(T t, String[] orderBy, PageBean pageBean) {
         return baseRepository.findByEntity(t, pageBean, orderBy);
     }
 
