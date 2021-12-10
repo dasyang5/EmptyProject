@@ -24,6 +24,8 @@ public interface BaseService<T, ID extends Serializable> {
 
     List<T> findAll();
 
+    CustomerQuery<T, ID> customerQuery();
+
     T get(ID id);
 
     List<T> find(T t, PageBean pageBean);

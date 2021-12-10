@@ -47,6 +47,11 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
     }
 
     @Override
+    public CustomerQuery<T, ID> customerQuery() {
+        return new CustomerQuery<T, ID>(baseRepository);
+    }
+
+    @Override
     public T get(ID id) {
         Optional<T> t = baseRepository.findById(id);
         return t.orElse(null);
