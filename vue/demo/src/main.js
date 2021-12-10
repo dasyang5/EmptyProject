@@ -3,13 +3,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import ElementUI from 'element-ui';
+import { Message } from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import qs from 'qs'
 import VueAxios from "vue-axios";
 import App from './App'
 import router from './router'
-import {Fragment} from 'vue-fragment'
+import Fragment from 'vue-fragment'
 import Cookies from 'js-cookie'
 import i18n from './common/lang' // internationalization
 import Common from './common/script/common'

@@ -1,29 +1,17 @@
 <template>
-    <div style="height: 100%;width: 100%" :style="loginContainerStyle">
-        <el-row style="border-bottom:1px solid rgba(0,0,0,0.17); background-color: white">
-            <el-col :span="2" :offset="1" style="padding: 15px 5px 5px 5px; cursor: pointer" @click.native="backHome">
-                <span><img class="logo" src="@/assets/images/logo.png"></span>
-            </el-col>
-            <el-col :span="20" style="padding: 15px 5px 5px 5px; line-height: 40px; font-size: 17px; margin-left: 20px">
-                {{$t('login.login')}}
-            </el-col>
-        </el-row>
-        <el-row style="padding-top: 15%">
-            <el-col :span="7" :offset="13">
-                <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);box-sizing: border-box; padding: 20px; background-color: white; border-radius: 5px">
-                    <div style="text-align: center;font-size: 20px;line-height: 50px">
-                        {{$t('login.title')}}
-                    </div>
-                    <el-input type="text" v-model="loginForm.username" :placeholder="$t('login.username')" style="margin: 20px 0"/>
-                    <el-input type="password" v-model="loginForm.password" :placeholder="$t('login.password')" show-password style="margin: 20px 0"/>
-                    <!--错误提示-->
-                    <div id="error-msg" style="height: 15px;line-height: 15px;font-size: 13px; color: red">{{errorMsg}}</div>
-                    <!--登录-->
-                    <el-button :loading="loginStatus" style="width: 100%; margin: 20px 0" @click="login" type="primary">{{$t('login.login')}}</el-button>
-                </div>
-            </el-col>
-        </el-row>
-    </div>
+    <el-dialog :visible.sync="visible" width="470px" :show-close="false" id="login-form">
+        <div id="login-main">
+            <div style="text-align: center;font-size: 20px;line-height: 50px">
+                {{$t('login.title')}}
+            </div>
+            <el-input type="text" v-model="loginForm.username" :placeholder="$t('login.username')" style="margin: 20px 0"/>
+            <el-input type="password" v-model="loginForm.password" :placeholder="$t('login.password')" show-password style="margin: 20px 0"/>
+            <!--错误提示-->
+            <div id="error-msg" style="height: 15px;line-height: 15px;font-size: 13px; color: red">{{errorMsg}}</div>
+            <!--登录-->
+            <el-button :loading="loginStatus" style="width: 100%; margin: 20px 0" @click="login" type="primary">{{$t('login.login')}}</el-button>
+        </div>
+    </el-dialog>
 </template>
 
 <script>
@@ -42,11 +30,15 @@
                     backgroundSize: '100% 100%'
                 },
                 errorMsg: null,
-                loginStatus: false
+                loginStatus: false,
+                visible: false
             };
         },
         methods: {
             ...mapMutations(['changeLogin']),
+            show() {
+                this.visible = true;
+            },
             login() {
                 this.loginStatus = true;
                 this.errorMsg = null;
@@ -76,9 +68,6 @@
             showLoginErrorMsg(msg){
                 this.errorMsg = msg;
                 // this.$message.error(msg);
-            },
-            backHome() {
-                this.$parent.hideLogin();
             }
         },
         mounted() {
@@ -93,6 +82,25 @@
 </script>
 
 <style lang="scss">
+    #login-form{
+        .el-dialog{
+            border-radius: 5px;
+        }
+        .el-dialog__header {
+            display: none;
+        }
+        .el-dialog__body {
+            padding: 0;
+        }
+        #login-main {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+            box-sizing: border-box;
+            padding: 20px 40px;
+            background-color: white;
+            border-radius: 5px;
+            width: 100%;
+        }
+    }
     .logo {
         width: 100%;
         vertical-align: middle;
