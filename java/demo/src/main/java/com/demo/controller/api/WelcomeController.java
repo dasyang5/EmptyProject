@@ -1,8 +1,6 @@
 package com.demo.controller.api;
 
-import com.demo.bean.RestResponse;
 import com.demo.controller.BaseController;
-import com.demo.entity.User;
 import com.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +16,6 @@ public class WelcomeController extends BaseController {
 
     @Autowired
     UserService userService;
-
-    @RequestMapping("test")
-    public RestResponse test() {
-
-        userService.customerQuery().entity(new User()).orderBy("creTime asc").tableData();
-        return success();
-    }
 
 
 }

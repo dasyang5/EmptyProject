@@ -1,6 +1,7 @@
 package com.demo.bean;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Alex
@@ -44,10 +45,13 @@ public class RestResponse extends HashMap<String, Object> {
     }
 
     public RestResponse tableData(TableData tableData) {
-
         this.put("rows", tableData.getData());
         this.put("total", tableData.getCount());
+        return this;
+    }
 
+    public RestResponse rows(List list) {
+        this.put("rows", list);
         return this;
     }
 

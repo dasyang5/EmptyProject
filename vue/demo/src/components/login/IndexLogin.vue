@@ -58,6 +58,7 @@
                         localStorage.setItem("auth", JSON.stringify(res.auth));
                         localStorage.setItem('Authorization', _this.userToken);
                         localStorage.setItem('username', res.user.username);
+                        localStorage.setItem('theme', res.user.theme);
                         _this.$router.push('/system/home');
                     }).catch(error => {
                         this.loginStatus = false;

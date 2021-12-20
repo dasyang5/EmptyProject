@@ -26,4 +26,9 @@ export default {
     .table-button{
         padding: 5px 8px;
     }
+    .customerTable{
+        .el-table__header th{
+            background-color: rgba(202, 202, 202, 0.31);
+        }
+    }
 </style>

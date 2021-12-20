@@ -22,22 +22,23 @@ public class CustomerQuery<T, ID extends Serializable> {
 
     private PageBean pageBean;
 
-    private T t;
+    private Class clazz;
 
     private StringBuilder paramsHql = new StringBuilder();
 
     private StringBuilder orderHql = new StringBuilder();
 
-    private Map<String, FuzzyConfig> likeFields = new HashMap<>();
-
     private Map<String, Object> params = new HashMap<>();
 
-    CustomerQuery(BaseRepository<T, ID> baseRepository) {
+    CustomerQuery(BaseRepository<T, ID> baseRepository, Class clazz) {
         this.baseRepository = baseRepository;
+        this.clazz = clazz;
     }
 
     public List<T> list() {
-        return baseRepository.findByHql(" from " + paramsHql.toString() + orderHql.toString(), params, pageBean);
+        String hql = " from " + clazz.getSimpleName() + paramsHql.toString().replaceFirst("and", "where") +
+                (orderHql.length() > 0 ? " order by " + orderHql.toString() : "");
+        return baseRepository.findByHql(hql, params, pageBean);
     }
 
     public T get() {
@@ -49,7 +50,7 @@ public class CustomerQuery<T, ID extends Serializable> {
     }
 
     public long count() {
-        return baseRepository.countByHql("select count(1) from " + paramsHql.toString(), params);
+        return baseRepository.countByHql("select count(1) from " + clazz.getSimpleName() + paramsHql.toString().replaceFirst("and", "where"), params);
     }
 
     public TableData<T> tableData() {
@@ -65,53 +66,16 @@ public class CustomerQuery<T, ID extends Serializable> {
     }
 
     public CustomerQuery<T, ID> orderBy(String orderStr) {
-        this.orderHql.append(orderStr);
+        this.orderHql.append(" ").append(orderStr).append(" ");
         return this;
     }
 
     public CustomerQuery<T, ID> entity(T t) {
-        this.t = t;
-        return this;
-    }
-
-    public CustomerQuery<T, ID> param(String key, Object value) {
-        paramsHql.append(key).append(" = :").append(key);
-        params.put(key, value);
-        return this;
-    }
-
-    public CustomerQuery<T, ID> isNull(String key) {
-        paramsHql.append(key).append(" is null ");
-        return this;
-    }
-
-    public CustomerQuery<T, ID> notNull(String key) {
-        paramsHql.append(key).append(" not null ");
-        return this;
-    }
-
-    public CustomerQuery<T, ID> in(String key, Object[] values) {
-        return this;
-    }
-
-    public CustomerQuery<T, ID> notIn(String key, Object[] values) {
-        return this;
-    }
-
-    public CustomerQuery<T, ID> like(String key, FuzzyConfig fuzzyConfig) {
-        likeFields.put(key, fuzzyConfig);
-        return this;
-    }
-
-    public CustomerQuery<T, ID> like(String key, String value) {
-        paramsHql.append(key).append(" like :").append(key);
-        params.put(key, value);
-        return this;
+        return this.entity(t, null);
     }
 
     @SneakyThrows
-    private void generateHql() {
-
+    public CustomerQuery<T, ID> entity(T t, Map<String, FuzzyConfig> likeFields) {
         Class clazz = t.getClass();
 
         paramsHql.append(clazz.getSimpleName());
@@ -121,12 +85,8 @@ public class CustomerQuery<T, ID extends Serializable> {
                 f.setAccessible(true);
                 Object value = f.get(t);
                 if (null != value && StringUtils.hasLength(value.toString())) {
-                    if (params.isEmpty()) {
-                        paramsHql.append(" where ");
-                    } else {
-                        paramsHql.append(" and ");
-                    }
-                    if (likeFields.containsKey(f.getName())) {
+                    paramsHql.append(" and ");
+                    if (likeFields != null && likeFields.containsKey(f.getName())) {
                         FuzzyConfig fuzzyConfig = likeFields.get(f.getName());
                         paramsHql.append(f.getName()).append(" like ").append(":").append(f.getName());
                         params.put(f.getName(), fuzzyConfig.getPrefix() + f.get(t) + fuzzyConfig.getSuffix());
@@ -137,6 +97,29 @@ public class CustomerQuery<T, ID extends Serializable> {
                 }
             }
         }
+        return this;
+    }
+
+    public CustomerQuery<T, ID> equal(String key, Object value) {
+        paramsHql.append(" and ").append(key).append(" = :").append(key).append(" ");
+        params.put(key, value);
+        return this;
+    }
+
+    public CustomerQuery<T, ID> isNull(String key) {
+        paramsHql.append(" and ").append(key).append(" is null ");
+        return this;
+    }
+
+    public CustomerQuery<T, ID> isNotNull(String key) {
+        paramsHql.append(" and ").append(key).append(" is not null ");
+        return this;
+    }
+
+    public CustomerQuery<T, ID> like(String key, String value) {
+        paramsHql.append(" and ").append(key).append(" like :").append(key).append(" ");
+        params.put(key, value);
+        return this;
     }
 
 }

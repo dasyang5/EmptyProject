@@ -1,24 +1,26 @@
 <template>
     <el-container ref="tableContainer">
-        <el-header style="height: auto; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);margin-bottom: 20px; padding-top: 17px">
+        <el-header style="height: auto; padding-top: 17px;">
             <el-form :model="formData" label-width="auto" label-position="left" :inline="true" size="mini">
-                <el-form-item :label="$t('system.user.username')">
-                    <el-input v-model="formData.username"></el-input>
+                <el-form-item>
+                    <el-button v-if="$common.checkAuth('/api/user/add')" type="primary" @click="add">{{$t('common.add')}}</el-button>
                 </el-form-item>
-                <el-form-item style="float: right">
-                    <el-button v-if="$common.checkAuth('/api/user/add')" type="success" @click="add">{{$t('common.add')}}</el-button>
+                <el-form-item>
+                    <el-input :placeholder="$t('system.user.username')" v-model="formData.username">
+                        <el-button slot="append" icon="el-icon-search" @click="list"></el-button>
+                    </el-input>
                 </el-form-item>
-                <el-form-item style="float: right">
-                    <el-button type="primary" @click="search">{{$t('common.search')}}</el-button>
+                <el-form-item style="float: right;">
+                    <el-button icon="el-icon-refresh-left" circle @click="list"></el-button>
                 </el-form-item>
             </el-form>
         </el-header>
-        <el-main style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); text-align: center; padding-top: 17px;">
+        <el-main style="text-align: center; padding-top: 17px;">
             <el-table
-                border
+                class="customerTable"
                 v-loading="loading"
                 :data="tableData"
-                style="width: 100%;min-height: 550px">
+                style="width: 100%;min-height: 560px">
                 <el-table-column
                     prop="username"
                     :label="$t('system.user.username')"
@@ -44,32 +46,29 @@
                     width="150"
                     :label="$t('system.user.status')">
                     <template slot-scope="scope">
-                        <el-tag v-if="!scope.row.enabled" type="danger">禁用</el-tag>
-                        <el-tag v-else-if="!scope.row.accountNonLocked" type="warning">锁定</el-tag>
-                        <el-tag v-else type="success">正常</el-tag>
+                        <el-tag v-if="!scope.row.enabled" type="danger" size="mini">{{$t('system.user.disable')}}</el-tag>
+                        <el-tag v-else-if="!scope.row.accountNonLocked" type="warning" size="mini">{{$t('system.user.lock')}}</el-tag>
+                        <el-tag v-else type="success" size="mini">{{$t('system.user.normal')}}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="loginTime"
                     align="center"
-                    width="280"
                     :label="$t('system.user.loginTime')">
                 </el-table-column>
                 <el-table-column
                     prop="updTime"
                     align="center"
-                    width="280"
                     :label="$t('common.updateTime')">
                 </el-table-column>
                 <el-table-column
-                    fixed="right"
                     align="center"
-                    width="280"
+                    width="200"
                     :label="$t('common.operator')">
                     <template slot-scope="scope">
-                        <el-button class="table-button" type="primary" size="mini" plain icon="el-icon-refresh-left" @click="reset(scope.row)">{{$t('system.user.reset')}}</el-button>
-                        <el-button class="table-button" v-if="!scope.row.enabled" type="warning" size="mini" plain icon="el-icon-unlock" @click="enable(scope.row)">{{$t('system.user.enable')}}</el-button>
-                        <el-button class="table-button" v-else type="warning" size="mini" plain icon="el-icon-lock" @click="disable(scope.row)">{{$t('system.user.disable')}}</el-button>
+                        <el-button class="table-button" type="text" size="mini" plain icon="el-icon-refresh-left" @click="reset(scope.row)">{{$t('system.user.reset')}}</el-button>
+                        <el-button class="table-button" v-if="!scope.row.enabled" type="text" size="mini" plain icon="el-icon-unlock" @click="enable(scope.row)">{{$t('system.user.enable')}}</el-button>
+                        <el-button class="table-button" v-else type="text" size="mini" plain icon="el-icon-lock" @click="disable(scope.row)">{{$t('system.user.disable')}}</el-button>
 <!--                        <el-button @click="remove(scope.row)" v-if="scope.row.username === 'admin'" disabled="" type="text" size="small">{{$t('common.delete')}}</el-button>-->
 <!--                        <el-button @click="remove(scope.row)" v-else type="text" size="small">{{$t('common.delete')}}</el-button>-->
                     </template>
@@ -109,12 +108,6 @@
             }
         },
         methods: {
-            /**
-             * 点击搜索按钮
-             */
-            search() {
-                this.list();
-            },
             /**
              * 查询数据
              */

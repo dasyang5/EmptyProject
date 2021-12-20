@@ -73,6 +73,9 @@ public class User implements Serializable {
     @Column(name = "login_time")
     private Date loginTime;
 
+    @Column(name = "theme", length = 10)
+    private String theme;
+
     @Column(name = "upd_time")
     private Date updTime;
 

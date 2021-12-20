@@ -14,22 +14,77 @@ import java.util.List;
 @Transactional
 public interface BaseService<T, ID extends Serializable> {
 
+    /**
+     * 新增实体
+     * @param t
+     * @return
+     */
     T save(T t);
 
+    /**
+     * 删除实体
+     * @param t
+     */
     void delete(T t);
 
+    /**
+     * 通过主键删除
+     * @param id
+     */
     void delete(ID id);
 
+    /**
+     * 更新实体
+     * @param t
+     */
     void update(T t);
 
+    /**
+     * 查询全部
+     * @return
+     */
     List<T> findAll();
 
+    /**
+     * 自定义查询
+     * @return
+     */
     CustomerQuery<T, ID> customerQuery();
 
+    /**
+     * 自定义删除
+     * @return
+     */
+    CustomerDelete<T, ID> customerDelete();
+
+    /**
+     * 自定义更新
+     * @return
+     */
+    CustomerUpdate<T, ID> customerUpdate();
+
+    /**
+     * 获取单个实体
+     * @param id
+     * @return
+     */
     T get(ID id);
 
+    /**
+     * 分页查询
+     * @param t
+     * @param pageBean 为空时不分页
+     * @return
+     */
     List<T> find(T t, PageBean pageBean);
 
+    /**
+     * 分页查询
+     * @param t
+     * @param orderBy 排序字段  例如 new String[] {"username desc"}
+     * @param pageBean
+     * @return
+     */
     List<T> find(T t, String[] orderBy, PageBean pageBean);
 
     T getEntity(T t);

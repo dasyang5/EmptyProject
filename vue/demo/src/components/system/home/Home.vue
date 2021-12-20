@@ -1,14 +1,22 @@
 <template>
     <el-container>
         <el-main v-if="$common.checkAuth('/api/home/list')">
-            Hello
+
         </el-main>
     </el-container>
 </template>
 
 <script>
     export default {
-        name: "Home"
+        name: "Home",
+        data() {
+            return {
+
+            }
+        },
+        methods: {
+
+        }
     }
 </script>
 <!--<style>

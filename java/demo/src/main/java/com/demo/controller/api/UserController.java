@@ -140,4 +140,15 @@ public class UserController extends BaseController {
         return RestResponse.success();
     }
 
+    @PostMapping("updateTheme")
+    public RestResponse updateTheme(String theme) {
+
+        userService.customerUpdate()
+                .set("theme", theme)
+                .where("userId", getCurrentUserId())
+                .update();
+        return success();
+
+    }
+
 }

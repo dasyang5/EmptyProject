@@ -2,7 +2,7 @@
   <div>
     <el-row class="index-header">
       <el-col :span="2" :offset="1" style="padding: 15px 5px 5px 5px">
-        <span><img class="logo" src="@/assets/images/logo_new.png"></span>
+        <span><img class="logo" src="@/assets/images/logo.png"></span>
       </el-col>
       <el-col :span="20">
         <el-menu v-if="language==='zh'" text-color="#303133" active-text-color="#303133" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">

@@ -161,7 +161,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24">
+      <el-col :span="24" style="text-align: center">
         <p class="rights text-center" style="font-size: 12px;">© 2020 Newland Payment Technology. All rights reserved.</p>
       </el-col>
     </el-row>

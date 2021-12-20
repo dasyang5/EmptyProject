@@ -1,20 +1,19 @@
 <template>
     <el-container ref="tableContainer">
-        <el-header style="height: auto; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);margin-bottom: 20px; padding-top: 17px">
+        <el-header style="height: auto;margin-bottom: 20px; padding-top: 17px">
             <el-form :model="formData" label-width="auto" label-position="left" :inline="true" size="mini">
-                <el-form-item :label="$t('system.menuResource.menuName')">
-                    <el-input v-model="formData.menuName"></el-input>
+                <el-form-item>
+                    <el-button v-if="$common.checkAuth('/api/menuResource/add')" type="primary" @click="add">{{$t('common.add')}}</el-button>
                 </el-form-item>
-                <el-form-item style="float: right">
-                    <el-button type="success" @click="add">{{$t('common.add')}}</el-button>
-                </el-form-item>
-                <el-form-item style="float: right">
-                    <el-button type="primary" @click="search">{{$t('common.search')}}</el-button>
+                <el-form-item>
+                    <el-input v-model="formData.menuName" :placeholder="$t('system.menuResource.menuName')">
+                        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                    </el-input>
                 </el-form-item>
             </el-form>
         </el-header>
         <el-container>
-            <el-aside style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);margin-right: 10px">
+            <el-aside style="margin-right: 10px;border-right: 2px solid whitesmoke">
                 <el-tree ref="authTree" :data="data" :props="defaultProps" @node-click="handleNodeClick" draggable
                          @node-drop="handleDrop"
                          :allow-drop="allowDrop"
@@ -28,7 +27,7 @@
                     </span>
                 </el-tree>
             </el-aside>
-            <el-main style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);text-align: center">
+            <el-main style="text-align: center">
                 <el-table
                     border
                     v-loading="loading"

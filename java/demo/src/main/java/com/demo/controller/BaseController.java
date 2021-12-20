@@ -1,15 +1,14 @@
 package com.demo.controller;
 
+import com.demo.bean.PageBean;
+import com.demo.bean.RestResponse;
 import com.demo.config.constant.SystemConst;
 import com.demo.config.locale.MyI18n;
 import com.demo.config.properties.ApplicationYML;
 import com.demo.entity.User;
-import com.demo.bean.PageBean;
-import com.demo.bean.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -30,11 +29,12 @@ public class BaseController {
     @Autowired
     public HttpServletRequest httpServletRequest;
 
-    @Autowired
-    public HttpServletResponse httpServletResponse;
-
     public User getCurrentUser() {
         return (User) httpSession.getAttribute(SystemConst.CURRENT_USER);
+    }
+
+    public String getCurrentUserId() {
+        return getCurrentUser().getUserId();
     }
 
     public String getCurrentOrganId() {

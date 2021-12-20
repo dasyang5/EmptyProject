@@ -5,6 +5,7 @@ import com.demo.bean.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,7 +49,17 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
 
     @Override
     public CustomerQuery<T, ID> customerQuery() {
-        return new CustomerQuery<T, ID>(baseRepository);
+        return new CustomerQuery<T, ID>(baseRepository, (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
+
+    @Override
+    public CustomerDelete<T, ID> customerDelete() {
+        return new CustomerDelete<T, ID>(baseRepository, (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
+
+    @Override
+    public CustomerUpdate<T, ID> customerUpdate() {
+        return new CustomerUpdate<T, ID>(baseRepository, (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
     }
 
     @Override

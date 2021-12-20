@@ -8,6 +8,7 @@ import org.hibernate.query.internal.NativeQueryImpl;
 import org.hibernate.transform.Transformers;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
@@ -77,6 +78,7 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRep
     }
 
     @Override
+    @Transactional(readOnly = false)
     public int executeUpdate(String hql, Map<String, Object> params) {
         Query query = em.createQuery(hql);
         setParameters(params, query);

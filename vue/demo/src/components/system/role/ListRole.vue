@@ -1,45 +1,47 @@
 <template>
     <el-container ref="tableContainer">
-        <el-header style="height: auto; box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);margin-bottom: 20px; padding-top: 17px">
+        <el-header style="height: auto;margin-bottom: 20px; padding-top: 17px">
             <el-form :model="formData" label-width="auto" label-position="left" :inline="true" size="mini">
-                <el-form-item :label="$t('system.role.roleName')">
-                    <el-input v-model="formData.roleName"></el-input>
+                <el-form-item>
+                    <el-button v-if="$common.checkAuth('/api/role/add')" type="primary" @click="add">{{$t('common.add')}}</el-button>
                 </el-form-item>
-                <el-form-item style="float: right">
-                    <el-button type="success" @click="add">{{$t('common.add')}}</el-button>
+                <el-form-item>
+                    <el-input v-model="formData.roleName" :placeholder="$t('system.role.roleName')">
+                        <el-button slot="append" icon="el-icon-search" @click="list"></el-button>
+                    </el-input>
                 </el-form-item>
-                <el-form-item style="float: right">
-                    <el-button type="primary" @click="search">{{$t('common.search')}}</el-button>
+                <el-form-item style="float: right;">
+                    <el-button icon="el-icon-refresh-left" circle @click="list"></el-button>
                 </el-form-item>
             </el-form>
         </el-header>
-        <el-main style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); text-align: center; padding-top: 17px;">
-            <el-row style="min-height: 550px" v-loading="loading">
-                <el-col :span="6" v-for="role in tableData" :key="role.roleId">
-                    <el-card style="margin: 30px">
-                       <!-- <div slot="header">
-                            <span>{{role.roleName}}</span>
-                        </div>-->
-                        <div>
-                            <img style="width: 130px" class="home-image" src="@/assets/images/system/role/role.png">
-                        </div>
-                        <div style="font-size: 20px">
-                            {{role.roleName}}
-                        </div>
-                        <el-divider></el-divider>
-                        <el-row style="margin-top: 10px">
-                            <el-col :span="12" style="padding: 5px">
-                                <el-button style="float: right; padding: 5px 0;width: 100%;" type="danger" icon="el-icon-delete" v-if="role.roleName === 'admin' || role.roleName === 'user'" disabled="" size="mini">{{$t('common.delete')}}</el-button>
-                                <el-button style="float: right; padding: 5px 0;width: 100%;" type="danger" icon="el-icon-delete" v-else @click="remove(role)" size="mini">{{$t('common.delete')}}</el-button>
-                            </el-col>
-                            <el-col :span="12" style="padding: 5px">
-                                <el-button style="float: right; padding: 5px 0;width: 100%;" type="primary" icon="el-icon-edit" size="mini" @click="edit(role)">{{$t('common.edit')}}</el-button>
-                            </el-col>
-                        </el-row>
-                    </el-card>
-                </el-col>
-            </el-row>
-
+        <el-main style="text-align: center; padding-top: 17px;">
+            <el-table
+                class="customerTable"
+                v-loading="loading"
+                :data="tableData"
+                style="width: 100%;min-height: 560px">
+                <el-table-column
+                    prop="roleName"
+                    :label="$t('system.role.roleName')"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    prop="creTime"
+                    :label="$t('common.createTime')"
+                    align="center">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    width="260"
+                    :label="$t('common.operator')">
+                    <template slot-scope="scope">
+                        <el-button type="text" plain icon="el-icon-delete" v-if="scope.row.roleName === 'admin' || scope.row.roleName === 'user'" disabled="" size="mini">{{$t('common.delete')}}</el-button>
+                        <el-button type="text" plain icon="el-icon-delete" v-else @click="remove(scope.row)" size="mini">{{$t('common.delete')}}</el-button>
+                        <el-button type="text" plain icon="el-icon-edit" size="mini" @click="edit(scope.row)">{{$t('common.edit')}}</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
             <el-pagination
                 style="margin-top: 20px"
                 @size-change="handleSizeChange"
@@ -75,9 +77,6 @@
             }
         },
         methods: {
-            search() {
-                this.list();
-            },
             list() {
                 this.loading = true;
                 this.formData.currentPage = this.currentPage;
