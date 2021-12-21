@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="index-header">
-      <el-col :span="2" :offset="1" style="padding: 15px 5px 5px 5px">
+      <el-col :span="2" :offset="1" style="margin-top: 5px">
         <span><img class="logo" src="@/assets/images/logo.png"></span>
       </el-col>
       <el-col :span="20">

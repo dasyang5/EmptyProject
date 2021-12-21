@@ -100,6 +100,7 @@
                     path += keyPath[i];
                 }
                 if (path === this.$router.currentRoute.path) {
+
                     return;
                 }
 

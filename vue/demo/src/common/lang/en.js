@@ -73,7 +73,7 @@ export default {
         hotLine: 'Hot Line',
         username: 'Username',
         password: 'password',
-        title: 'NPT · ATLS',
+        title: 'NPT · DEMO',
         loginHit1: 'Both username and password are required.',
         loginHit2: 'Password or username is wrong',
         feature: {

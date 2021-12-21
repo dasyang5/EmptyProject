@@ -73,7 +73,7 @@ export default {
         hotLine: '热线电话',
         username: '用户名',
         password: '密码',
-        title: '新大陆 · 阿特拉斯',
+        title: '新大陆 · DEMO',
         loginHit1: '账号或密码不能为空',
         loginHit2: '账号或密码错误',
         feature: {
